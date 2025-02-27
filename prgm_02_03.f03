@@ -1,4 +1,4 @@
-Program prgm_02_03
+      Program prgm_02_03
 !
 !     This program reads a file name from the command line, opens that
 !     file, and loads a packed form of a symmetric matrix. Then, the packed
