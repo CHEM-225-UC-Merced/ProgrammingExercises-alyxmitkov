@@ -10,12 +10,12 @@ Program prgm_02_03
 !     NDim) of the matrix on the first line. The next (NDim*(NDim+1))/2
 !     lines each have one real number each given.
 !
-!
       Implicit None
       Integer::IIn=10,IError,NDim,i,j
       Real,Dimension(:),Allocatable::Array_Input,EVals,Temp_Vector
       Real,Dimension(:,:),Allocatable::Matrix,EVecs,Temp_Matrix
       Character(Len=256)::FileName
+      External SymmetricPacked2Matrix_LowerPac, Print_Matrix_Full_Real
 !
 !     Begin by reading the input file name from the command line. Then,
 !     open the file and read the input array, Array_Input.
@@ -34,7 +34,6 @@ Program prgm_02_03
 ! *************************************************************************
 ! WRITE CODE HERE TO READ THE ARRAY ELEMENTS FROM THE INPUT FILE.
 ! *************************************************************************
-!
 !
       do i = 1, (NDim*(NDim+1))/2
          read(IIn,*) Array_Input(i)
@@ -59,22 +58,23 @@ Program prgm_02_03
 !
       End Program prgm_02_03
 
-Subroutine SymmetricPacked2Matrix_LowerPac(NDim, Packed, FullMatrix)
-  Implicit None
-  Integer, Intent(In) :: NDim
-  Real, Intent(In) :: Packed((NDim*(NDim+1))/2)
-  Real, Intent(Out) :: FullMatrix(NDim, NDim)
-  Integer :: i, j, k
-
-  FullMatrix = 0.0
-  k = 1
-  Do j = 1, NDim
-    Do i = j, NDim
-      FullMatrix(i, j) = Packed(k)
-      FullMatrix(j, i) = Packed(k)
-      k = k + 1
-    End Do
-  End Do
+      Subroutine SymmetricPacked2Matrix_LowerPac(NDim, AMat_in, AMat_out)
+      Implicit None
+      Integer, Intent(In) :: NDim
+      Real, Intent(In) :: AMat_in((NDim*(NDim+1))/2)
+      Real, Intent(Out) :: AMat_out(NDim, NDim)
+      Integer :: i, j, k
+!
+      AMat_out = 0.0
+!
+      k = 1
+      Do j = 1, NDim
+        Do i = j, NDim
+          AMat_out(I, j) = AMat_in(k)
+          AMat_out(j, i) = AMat_in(k)
+          k = k + 1
+        End Do
+      End Do
       End Subroutine SymmetricPacked2Matrix_LowerPac
 
       Subroutine Print_Matrix_Full_Real(AMat,M,N)
